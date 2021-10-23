@@ -1,9 +1,12 @@
 const express = require("express");
-const User = require("./user.route");
+const userRoute = require("./user.route");
+const loginRoute = require("./login.route");
+const workspaceRoute = require("./workspace.route");
 
-//
+const MDW = require("../middlewares/authToken");
 const app = express();
 
-app.use("/user", User);
-
+app.use("/user", userRoute);
+app.use("/login", MDW.required, loginRoute);
+app.use("/workspace", workspaceRoute);
 module.exports = app;

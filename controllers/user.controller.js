@@ -20,8 +20,9 @@ class User {
   }
 
   async getUserById({ userId }) {
-    console.log("userId_dnd", userId);
-    const result = await UserEntity.findOne({ _id: userId });
+    const result = await UserEntity.findOne({ _id: userId }).populate(
+      "workspace_IDs"
+    );
     return {
       data: result,
       status: 200,
@@ -50,7 +51,7 @@ class User {
         status: 200,
       };
     } catch (err) {
-      console.log("err createNewUser", err);
+      console.log("err update user", err);
       throw err;
     }
   }
@@ -62,7 +63,23 @@ class User {
         status: 200,
       };
     } catch (err) {
-      console.log("err createNewUser", err);
+      console.log("err delete user", err);
+      throw err;
+    }
+  }
+  async updateWS_IDs({ userId, data }) {
+    try {
+      const result = await UserEntity.findOneAndUpdate(
+        { _id: userId },
+        { $push: { workspace_IDs: data.workspace_IDs } }
+      );
+      // result.save();
+      return {
+        data: result,
+        status: 200,
+      };
+    } catch (err) {
+      console.log("err update user", err);
       throw err;
     }
   }

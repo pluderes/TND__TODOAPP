@@ -1,5 +1,5 @@
 require("dotenv").config();
-const modelUser = require("../models/User");
+const modelLogin = require("../models/Login");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const errorMessage = require("../config").errorMessage;
@@ -35,7 +35,7 @@ const login = async (data) => {
     return res.status(401).json(errorMessage(["email, password is require"]));
 
   try {
-    let user = await modelUser.checkEmail(data);
+    let user = await modelLogin.checkEmail(data);
     if (!user) res.status(402).json(errorMessage(["email or password wrong"]));
     else {
       const hashPass = await encodePass(user.password);
@@ -43,10 +43,10 @@ const login = async (data) => {
       if (checkPass) {
         let token = { id: user._id };
         let key = jwt.sign(token, process.env.JWT_KEY);
-        let userSend = { ...user._doc, token: key };
-        console.log("token", token);
-        console.log("key", key);
-        console.log("userSend", userSend);
+        // let userSend = { ...user._doc, token: key };
+        // console.log("token", token);
+        // console.log("key", key);
+        // console.log("userSend", userSend);
         return key;
       } else {
         return res.status(402).json(errorMessage(["password wrong"]));
