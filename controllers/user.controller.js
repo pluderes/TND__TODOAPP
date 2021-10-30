@@ -73,7 +73,6 @@ class User {
         { _id: userId },
         { $push: { workspace_IDs: data.workspace_IDs } }
       );
-      // result.save();
       return {
         data: result,
         status: 200,

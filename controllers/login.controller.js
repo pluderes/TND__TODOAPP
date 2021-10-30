@@ -43,10 +43,6 @@ const login = async (data) => {
       if (checkPass) {
         let token = { id: user._id };
         let key = jwt.sign(token, process.env.JWT_KEY);
-        // let userSend = { ...user._doc, token: key };
-        // console.log("token", token);
-        // console.log("key", key);
-        // console.log("userSend", userSend);
         return key;
       } else {
         return res.status(402).json(errorMessage(["password wrong"]));
