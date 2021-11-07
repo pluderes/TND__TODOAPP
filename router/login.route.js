@@ -1,6 +1,6 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
+const jwt = require("jsonwebtoken");
 
 const loginRouter = express.Router();
 
@@ -9,6 +9,8 @@ loginRouter.post("/", async (req, res) => {
   try {
     const dataLogin = req.body;
     const result = await Controller.Login.login(dataLogin);
+    res.json(result);
+    // console.log("result", result);
     res.send({ token: result });
   } catch (err) {
     res.status(500).json({
@@ -18,9 +20,12 @@ loginRouter.post("/", async (req, res) => {
 });
 
 // login by token
-loginRouter.get("/userID", async (req, res) => {
+loginRouter.get("/token", async (req, res) => {
   try {
-    res.send({ userID: req.userId });
+    // console.log("token: ", req.headers.authorization.split(" ")[1]);
+    let token = req.headers.authorization.split(" ")[1];
+    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    res.send({ userID: decoded.id });
   } catch (err) {
     res.status(500).json({
       msg: "err",
