@@ -36,7 +36,7 @@ const login = async (data) => {
 
   try {
     let user = await modelLogin.checkEmail(data);
-    if (!user) res.status(402).json(errorMessage(["email or password wrong"]));
+    if (!user) res.status(402).json(errorMessage(["email wrong"])); 
     else {
       const hashPass = await encodePass(user.password);
       const checkPass = await comparePass(data.password, hashPass);
