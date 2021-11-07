@@ -1,13 +1,27 @@
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
+const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 const workspaceRouter = express.Router();
 
 // create new user
 workspaceRouter.post("/addWorkspace", async (req, res) => {
   try {
-    const newWorkspace = req.body;
+    const { name, desc, userToken } = req.body;
+    let userID = await jwt.verify(userToken, process.env.JWT_KEY);
+    const newWorkspace = {
+      workspace_name: name,
+      description: desc,
+      users_in_ws: [
+        {
+          user_ID: mongoose.Types.ObjectId(userID.id),
+          user_permission: "admin",
+        },
+      ],
+    };
+    // console.log("newWorkspace", newWorkspace);
     newWorkspace.workspace_ID = uuidv4();
     const result = await Controller.Workspace.createWorkspace(newWorkspace);
     res.json(result);
