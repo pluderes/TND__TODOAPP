@@ -9,8 +9,10 @@ const workspace = new Schema({
     type: String,
     required: true,
   },
+  description: { type: String },
   users_in_ws: [
     {
+      _id: false,
       user_ID: { type: Schema.Types.ObjectId, ref: "Users" },
       user_permission: { type: String, required: true },
     },
