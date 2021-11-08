@@ -60,9 +60,10 @@ const getWorkspaceById = async ({ workspaceID }) => {
   }
 };
 
-const getWorkspaceByUserId = async ({ userID }) => {
+const getWorkspaceByUserId = async ({ id }) => {
   try {
-    let result = await modelWorkspace.getWorkspaceByUserId({ userID });
+    // console.log("userID - controller", id);
+    let result = await modelWorkspace.getWorkspaceByUserId({ id });
     if (!result)
       res
         .status(402)
@@ -77,10 +78,11 @@ const getWorkspaceByUserId = async ({ userID }) => {
   } catch (err) {
     res
       .status(402)
-      .json(errorMessage(["err in get workspace by user ID in controller", err]));
+      .json(
+        errorMessage(["err in get workspace by user ID in controller", err])
+      );
   }
 };
-
 
 const deleteWorkspace = async ({ workspaceID }) => {
   try {

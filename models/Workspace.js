@@ -44,10 +44,11 @@ const getWorkspaceById = async ({ workspaceID }) => {
 };
 
 //   get WS by user ID
-const getWorkspaceByUserId = async ({ userID }) => {
+const getWorkspaceByUserId = async ({ id }) => {
   try {
-    const result = await WorkspaceEntity.findOne({
-      "users_in_ws.user_ID": userID,
+    // console.log("userID - models", id);
+    const result = await WorkspaceEntity.find({
+      "users_in_ws.user_ID": id,
     }).populate("");
     return {
       data: result,

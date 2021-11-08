@@ -54,10 +54,11 @@ workspaceRouter.get("/:workspaceID", async (req, res) => {
 });
 
 // get workspace by user_ID
-workspaceRouter.get("/user/:userID", async (req, res) => {
-  const { userID } = req.params;
+workspaceRouter.get("/user/:userToken", async (req, res) => {
+  let userID = await jwt.verify(req.params.userToken, process.env.JWT_KEY);
+  let id = userID.id;
   const { status, data } = await Controller.Workspace.getWorkspaceByUserId({
-    userID,
+    id,
   });
   res.status(status).json(data);
 });
