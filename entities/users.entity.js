@@ -21,6 +21,7 @@ const users = new Schema({
   workspace_IDs: [
     {
       type: Schema.Types.ObjectId,
+      unique: true,
       ref: "Workspace",
     },
   ],
