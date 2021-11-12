@@ -10,8 +10,6 @@ loginRouter.post("/", async (req, res) => {
     const dataLogin = req.body;
     const result = await Controller.Login.login(dataLogin);
     res.json(result);
-    // console.log("result", result);
-    res.send({ token: result });
   } catch (err) {
     res.status(500).json({
       msg: "email or password wrong",
