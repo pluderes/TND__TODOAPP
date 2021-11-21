@@ -20,27 +20,28 @@ workspaceRouter.post("/addWorkspace", async (req, res) => {
           user_permission: "admin",
         },
       ],
-      tables_in_ws: [],
     };
-    // console.log("newWorkspace", newWorkspace);
     newWorkspace.workspace_ID = uuidv4();
     const result = await Controller.Workspace.createWorkspace(newWorkspace);
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors server",
+      msg: "errors add WS --router",
     });
   }
 });
 
 // get all workspace
-workspaceRouter.get("/", async (req, res, { name }) => {
+workspaceRouter.get("/", async (req, res) => {
   try {
-    const result = await Controller.Workspace.getAllWorkspace({ name });
+    const { workspace_name } = req.body;
+    const result = await Controller.Workspace.getAllWorkspace({
+      workspace_name,
+    });
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "something wrong in router get workspace",
+      msg: "err get workspace --router",
     });
   }
 });
@@ -56,7 +57,6 @@ workspaceRouter.get("/:workspaceID", async (req, res) => {
 
 // get workspace by user_ID
 workspaceRouter.get("/user/:userToken", async (req, res) => {
-  console.log("userToken", req.params);
   let userID = await jwt.verify(req.params.userToken, process.env.JWT_KEY);
   let id = userID.id;
   const { status, data } = await Controller.Workspace.getWorkspaceByUserId({
@@ -74,14 +74,27 @@ workspaceRouter.patch("/addUserWS/:workspaceID", async (req, res) => {
       workspaceID,
       data: userID,
     });
-    // const add_wsID_userInfo = await Controller.User.updateWS_IDs({
-    //   workspaceID,
-    //   data: userID,
-    // });
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors server --router WS",
+      msg: "errors add user WS --router",
+    });
+  }
+});
+
+// edit WS
+workspaceRouter.patch("/editWorkspace/:workspaceID", async (req, res) => {
+  try {
+    const { workspaceID } = req.params;
+    const dataUpdate = req.body;
+    const result = await Controller.Workspace.editWorkspace({
+      workspaceID,
+      data: dataUpdate,
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({
+      msg: "errors edit WS --router",
     });
   }
 });
@@ -95,13 +108,10 @@ workspaceRouter.patch("/deleteUserWS/:workspaceID", async (req, res) => {
       workspaceID,
       data: userID,
     });
-    // const delete_wsID_userInfo = await Controller.User.updateWS_IDs({
-    //   workspaceID,
-    // });
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors server --router WS",
+      msg: "errors delete user WS --router",
     });
   }
 });
@@ -111,7 +121,7 @@ workspaceRouter.delete("/delete/:workspaceID", async (req, res, { name }) => {
   try {
     const { workspaceID } = req.params;
     const result = await Controller.Workspace.deleteWorkspace({ workspaceID });
-    console.log("result", result, req.body);
+    // console.log("result", result, req.body);
     res.json(result);
   } catch (err) {
     res.status(500).json({
