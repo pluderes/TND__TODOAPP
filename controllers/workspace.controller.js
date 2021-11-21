@@ -8,7 +8,7 @@ const createWorkspace = async (data) => {
       res
         .status(402)
         .json(
-          errorMessage(["something wrong when create workspace in controller"])
+          errorMessage(["err create workspace --controller"])
         );
     else {
       return result;
@@ -16,18 +16,18 @@ const createWorkspace = async (data) => {
   } catch (err) {
     res
       .status(402)
-      .json(errorMessage(["err in create workspace in controller", err]));
+      .json(errorMessage(["err create workspace --controller", err]));
   }
 };
 
-const getAllWorkspace = async ({ data }) => {
+const getAllWorkspace = async ({ workspace_name }) => {
   try {
-    let result = await modelWorkspace.getAllWorkspace({ data });
+    let result = await modelWorkspace.getAllWorkspace({ workspace_name });
     if (!result)
       res
         .status(402)
         .json(
-          errorMessage(["something wrong when get workspace in controller"])
+          errorMessage(["err get workspace --controller"])
         );
     else {
       return result;
@@ -35,7 +35,7 @@ const getAllWorkspace = async ({ data }) => {
   } catch (err) {
     res
       .status(402)
-      .json(errorMessage(["err in get workspace in controller", err]));
+      .json(errorMessage(["err get workspace --controller", err]));
   }
 };
 
@@ -47,7 +47,7 @@ const getWorkspaceById = async ({ workspaceID }) => {
         .status(402)
         .json(
           errorMessage([
-            "something wrong when get workspace by ID in controller",
+            "err get workspace by ID --controller",
           ])
         );
     else {
@@ -56,7 +56,7 @@ const getWorkspaceById = async ({ workspaceID }) => {
   } catch (err) {
     res
       .status(402)
-      .json(errorMessage(["err in get workspace by ID in controller", err]));
+      .json(errorMessage(["err get workspace by ID --controller", err]));
   }
 };
 
@@ -69,7 +69,7 @@ const getWorkspaceByUserId = async ({ id }) => {
         .status(402)
         .json(
           errorMessage([
-            "something wrong when get workspace by user ID in controller",
+            "err get workspace by user ID --controller",
           ])
         );
     else {
@@ -79,7 +79,7 @@ const getWorkspaceByUserId = async ({ id }) => {
     res
       .status(402)
       .json(
-        errorMessage(["err in get workspace by user ID in controller", err])
+        errorMessage(["err get workspace by user ID --controller", err])
       );
   }
 };
@@ -95,7 +95,7 @@ const addUserWS = async ({ workspaceID, data }) => {
         .status(402)
         .json(
           errorMessage([
-            "something wrong when get workspace by user ID in controller",
+            "err add user workspace --controller",
           ])
         );
     else {
@@ -105,7 +105,33 @@ const addUserWS = async ({ workspaceID, data }) => {
     res
       .status(402)
       .json(
-        errorMessage(["err in get workspace by user ID in controller", err])
+        errorMessage(["err add user workspace --controller", err])
+      );
+  }
+};
+
+const editWorkspace = async ({ workspaceID, data }) => {
+  try {
+    let result = await modelWorkspace.editWorkspace({
+      workspaceID,
+      data,
+    });
+    if (!result)
+      res
+        .status(402)
+        .json(
+          errorMessage([
+            "err edit workspace --controller",
+          ])
+        );
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(
+        errorMessage(["err edit workspace --controller", err])
       );
   }
 };
@@ -121,7 +147,7 @@ const deleteUserWS = async ({ workspaceID, data }) => {
         .status(402)
         .json(
           errorMessage([
-            "something wrong when get workspace by user ID in controller",
+            "err delete user in workspace --controller",
           ])
         );
     else {
@@ -131,7 +157,7 @@ const deleteUserWS = async ({ workspaceID, data }) => {
     res
       .status(402)
       .json(
-        errorMessage(["err in get workspace by user ID in controller", err])
+        errorMessage(["err delete user in workspace --controller", err])
       );
   }
 };
@@ -144,7 +170,7 @@ const deleteWorkspace = async ({ workspaceID }) => {
         .status(402)
         .json(
           errorMessage([
-            "something wrong when delete workspace by ID in controller",
+            "err delete workspace by WS_ID --controller",
           ])
         );
     else {
@@ -153,7 +179,7 @@ const deleteWorkspace = async ({ workspaceID }) => {
   } catch (err) {
     res
       .status(402)
-      .json(errorMessage(["err in delete workspace by ID in controller", err]));
+      .json(errorMessage(["err delete workspace by WS_ID --controller", err]));
   }
 };
 module.exports = {
@@ -162,6 +188,7 @@ module.exports = {
   getWorkspaceById,
   getWorkspaceByUserId,
   addUserWS,
+  editWorkspace,
   deleteUserWS,
   deleteWorkspace,
 };
