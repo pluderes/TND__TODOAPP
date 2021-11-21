@@ -11,21 +11,20 @@ const createWorkspace = async (body) => {
       status: 200,
     };
   } catch (err) {
-    console.log("err create new workspace", err);
+    console.log("err create workspace --models", err);
     throw err;
   }
 };
 
-const getAllWorkspace = async ({ name }) => {
+const getAllWorkspace = async ({ workspace_name }) => {
   try {
-    const regexName = new RegExp(`${name}`);
+    const regexName = new RegExp(`${workspace_name}`);
     const query = {};
-    if (name) query.name = regexName;
-
+    if (workspace_name) query.workspace_name = regexName;
     const result = await WorkspaceEntity.find(query).limit(20);
     return result;
   } catch (err) {
-    console.log("err get all workspace", err);
+    console.log("err get all workspace --models", err);
     throw err;
   }
 };
@@ -38,7 +37,7 @@ const getWorkspaceById = async ({ workspaceID }) => {
       status: 200,
     };
   } catch (err) {
-    console.log("err get workspace by ID", err);
+    console.log("err get workspace by ID --models", err);
     throw err;
   }
 };
@@ -55,7 +54,7 @@ const getWorkspaceByUserId = async ({ id }) => {
       status: 200,
     };
   } catch (err) {
-    console.log("err get workspace by ID", err);
+    console.log("err get workspace by ID --models", err);
     throw err;
   }
 };
@@ -64,7 +63,7 @@ const getWorkspaceByUserId = async ({ id }) => {
 const editWorkspace = async ({ workspaceID, data }) => {
   try {
     const result = await WorkspaceEntity.findOneAndUpdate(
-      { _id: workspaceId },
+      { _id: workspaceID },
       { $set: data }
     );
     return {
@@ -72,7 +71,49 @@ const editWorkspace = async ({ workspaceID, data }) => {
       status: 200,
     };
   } catch (err) {
-    console.log("err update workspace", err);
+    console.log("err update workspace --models", err);
+    throw err;
+  }
+};
+
+//   add user to WS
+const addUserWS = async ({ workspaceID, data }) => {
+  try {
+    const result = await WorkspaceEntity.findOneAndUpdate(
+      { _id: workspaceID },
+      {
+        $push: {
+          users_in_ws: { user_ID: data.user_ID, user_permission: "member" },
+        },
+      }
+    );
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err update workspace --models", err);
+    throw err;
+  }
+};
+
+//   delete user in WS
+const deleteUserWS = async ({ workspaceID, data }) => {
+  try {
+    const result = await WorkspaceEntity.findOneAndUpdate(
+      { _id: workspaceID },
+      {
+        $pull: {
+          users_in_ws: { user_ID: data.user_ID },
+        },
+      }
+    );
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err delete user in workspace --models", err);
     throw err;
   }
 };
@@ -86,7 +127,7 @@ const deleteWorkspace = async ({ workspaceID }) => {
       status: 200,
     };
   } catch (err) {
-    console.log("err delete workspace", err);
+    console.log("err delete workspace --models", err);
     throw err;
   }
 };
@@ -96,5 +137,7 @@ module.exports = {
   getWorkspaceByUserId,
   createWorkspace,
   editWorkspace,
+  addUserWS,
+  deleteUserWS,
   deleteWorkspace,
 };
