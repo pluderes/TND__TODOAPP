@@ -1,9 +1,9 @@
 const modelColumn = require("../models/Column");
 const errorMessage = require("../config").errorMessage;
 
-const createColumn = async (data) => {
+const createColumn = async (newColumn) => {
   try {
-    let result = await modelColumn.createColumn(data);
+    let result = await modelColumn.createColumn(newColumn);
     if (!result)
       res
         .status(402)

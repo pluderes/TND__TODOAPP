@@ -17,6 +17,12 @@ const tables = new Schema({
     type: Boolean,
     required: true,
   },
+  column_IDs: [
+    {
+      _id: false,
+      column_ID: { type: Schema.Types.ObjectId, ref: "Column" },
+    },
+  ],
 });
 
 const Tables = mongoose.model("Tables", tables);

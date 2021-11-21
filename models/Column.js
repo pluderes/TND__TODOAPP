@@ -1,9 +1,25 @@
 const ColumnEntity = require("../entities/columns.entity");
+const TableEntity = require("../entities/tables.entity");
+const mongoose = require("mongoose");
 
 //   create Column
-const createColumn = async (body) => {
+const createColumn = async (newColumn) => {
   try {
-    const result = await ColumnEntity.create(body);
+    // console.log("newColumn --model", newColumn);
+    const result = await ColumnEntity.create(newColumn);
+    // console.log("column_id", result._id);
+
+    const result2 = await TableEntity.findOneAndUpdate(
+      { _id: newColumn.table_ID },
+      {
+        $push: {
+          column_IDs: {
+            column_ID: mongoose.Types.ObjectId(result._id),
+          },
+        },
+      }
+    );
+
     return {
       data: result,
       status: 200,
