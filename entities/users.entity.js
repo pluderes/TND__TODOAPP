@@ -18,13 +18,6 @@ const users = new Schema({
     type: String,
     required: true,
   },
-  workspace_IDs: [
-    {
-      type: Schema.Types.ObjectId,
-      unique: true,
-      ref: "Workspace",
-    },
-  ],
 });
 
 const Users = mongoose.model("Users", users);

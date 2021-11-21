@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 
 const taskList_subtasks = new Schema({
   taskList_ID: {
-    type: String,
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Card_taskList",
     required: true,
   },
   subtask_name: {

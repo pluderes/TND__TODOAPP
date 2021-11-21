@@ -3,6 +3,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const cards = new Schema({
+  column_ID: {
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Columns",
+  },
   card_name: {
     type: String,
     required: true,
@@ -10,23 +15,17 @@ const cards = new Schema({
   card_desc: {
     type: String,
   },
-  user_in_task_IDs: {
-    type: Array,
-    required: true,
-  },
+  users_in_card: [
+    {
+      _id: false,
+      user_ID: { type: Schema.Types.ObjectId, ref: "Users" },
+      user_permission: { type: String, required: true },
+    },
+  ],
   card_deadline: {
-    createAt: { type: Date, required: true },
-    deadline: { type: Date, required: true },
-    status: { type: String, required: true },
-  },
-  activity_IDs: {
-    type: Array,
-  },
-  taskList_IDs: {
-    type: Array,
-  },
-  comment_IDs: {
-    type: Array,
+    created_at: { type: Date, default: Date.now },
+    deadline: { type: Date },
+    done: { type: Boolean },
   },
 });
 

@@ -4,10 +4,14 @@ const Schema = mongoose.Schema;
 
 const card_activities = new Schema({
   card_ID: {
-    type: String,
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Cards",
+    required: true,
   },
   user_ID: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: "Users",
     required: true,
   },
   createAt: {

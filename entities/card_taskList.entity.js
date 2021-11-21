@@ -4,15 +4,14 @@ const Schema = mongoose.Schema;
 
 const card_taskList = new Schema({
   card_ID: {
-    type: String,
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Cards",
     required: true,
   },
   taskList_name: {
     type: String,
     required: true,
-  },
-  subTask_IDs: {
-    type: Array,
   },
   taskList_status: {
     type: Boolean,

@@ -4,18 +4,24 @@ const Schema = mongoose.Schema;
 
 const card_comments = new Schema({
   card_ID: {
-    type: String,
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Cards",
     required: true,
   },
   user_ID: {
-    type: String,
-    required: true,
+    _id: false,
+    type: Schema.Types.ObjectId,
+    ref: "Users",
+    requied: true,
   },
   comment_content: {
     type: String,
+    required: true,
   },
   createAt: {
     type: Date,
+    required: true,
   },
 });
 
