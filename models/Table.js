@@ -92,7 +92,7 @@ const deleteUserTable = async ({ tableID, data }) => {
       { _id: tableID },
       {
         $pull: {
-          users_in_card: { user_ID: data.user_ID },
+          users_in_table: { user_ID: data.user_ID },
         },
       }
     );
