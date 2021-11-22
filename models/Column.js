@@ -5,9 +5,7 @@ const mongoose = require("mongoose");
 //   create Column
 const createColumn = async (newColumn) => {
   try {
-    // console.log("newColumn --model", newColumn);
     const result = await ColumnEntity.create(newColumn);
-    // console.log("column_id", result._id);
 
     const result2 = await TableEntity.findOneAndUpdate(
       { _id: newColumn.table_ID },

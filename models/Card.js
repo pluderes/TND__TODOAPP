@@ -1,9 +1,21 @@
 const CardEntity = require("../entities/cards.entity");
+const ColumnEntity = require("../entities/columns.entity");
+const mongoose = require("mongoose");
 
 //   create card
-const createCard = async (body) => {
+const createCard = async (newCard) => {
   try {
-    const result = await CardEntity.create(body);
+    const result = await CardEntity.create(newCard);
+    const result2 = await ColumnEntity.findOneAndUpdate(
+      { _id: newCard.column_ID },
+      {
+        $push: {
+          card_IDs: {
+            card_ID: mongoose.Types.ObjectId(result._id),
+          },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,

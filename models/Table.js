@@ -20,8 +20,6 @@ const getAllTable = async ({ table_name }) => {
     const regexName = new RegExp(`${table_name}`);
     const query = {};
     if (table_name) query.table_name = regexName;
-    console.log("query:", query);
-
     const result = await TableEntity.find(query).limit(20);
     return result;
   } catch (err) {
@@ -66,6 +64,48 @@ const editTable = async ({ tableID, data }) => {
   }
 };
 
+//   add user to table
+const addUserTable = async ({ tableID, data }) => {
+  try {
+    const result = await TableEntity.findOneAndUpdate(
+      { _id: tableID },
+      {
+        $push: {
+          users_in_table: { user_ID: data.user_ID, user_permission: "member" },
+        },
+      }
+    );
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err add user table --models", err);
+    throw err;
+  }
+};
+
+//   delete user in table
+const deleteUserTable = async ({ tableID, data }) => {
+  try {
+    const result = await TableEntity.findOneAndUpdate(
+      { _id: tableID },
+      {
+        $pull: {
+          users_in_card: { user_ID: data.user_ID },
+        },
+      }
+    );
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err delete user in table --models", err);
+    throw err;
+  }
+};
+
 //   delete table
 const deleteTable = async ({ tableID }) => {
   try {
@@ -85,5 +125,7 @@ module.exports = {
   getAllTable,
   getTableByWorkspaceID,
   editTable,
+  addUserTable,
+  deleteUserTable,
   deleteTable,
 };
