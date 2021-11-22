@@ -8,7 +8,7 @@ const cardRouter = express.Router();
 // create new card
 cardRouter.post("/addCard", async (req, res) => {
   try {
-    const { name, desc, column_ID, user_ID } = req.body;
+    const { name, desc, column_ID, userToken } = req.body;
     let userID = await jwt.verify(userToken, process.env.JWT_KEY);
     const newCard = {
       column_ID: column_ID,

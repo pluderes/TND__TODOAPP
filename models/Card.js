@@ -63,14 +63,26 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
 //   update card
 const editCard = async ({ cardID, data }) => {
   try {
-    const result = await CardEntity.findOneAndUpdate(
-      { _id: cardID },
-      { $set: data }
-    );
-    return {
-      data: result,
-      status: 200,
-    };
+    if (data.card_deadline.deadline) {
+      data.card_deadline.deadline = new Date(data.card_deadline.deadline);
+      const result = await CardEntity.findOneAndUpdate(
+        { _id: cardID },
+        { $set: data }
+      );
+      return {
+        data: result,
+        status: 200,
+      };
+    } else {
+      const result = await CardEntity.findOneAndUpdate(
+        { _id: cardID },
+        { $set: data }
+      );
+      return {
+        data: result + "2",
+        status: 200,
+      };
+    }
   } catch (err) {
     console.log("err update card --models", err);
     throw err;
