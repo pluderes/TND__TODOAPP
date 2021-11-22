@@ -27,7 +27,7 @@ cardRouter.post("/addCard", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors add card --route",
+      msg: "errors add card --route" + err,
     });
   }
 });
@@ -39,7 +39,7 @@ cardRouter.get("/", async (req, res, { card_name }) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors get all card --route",
+      msg: "errors get all card --route" + err,
     });
   }
 });
@@ -73,7 +73,7 @@ cardRouter.patch("/editCard/:cardID", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors edit card --router",
+      msg: "errors edit card --router" + err,
     });
   }
 });
@@ -90,7 +90,7 @@ cardRouter.patch("/addUserCard/:cardID", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors add user card --router",
+      msg: "errors add user card --router" + err,
     });
   }
 });
@@ -107,7 +107,7 @@ cardRouter.patch("/deleteUserCard/:cardID", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors delete user Card --router",
+      msg: "errors delete user Card --router" + err,
     });
   }
 });
@@ -122,7 +122,7 @@ cardRouter.delete("/deleteCard/:cardID", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({
-      msg: "errors delete card --router",
+      msg: "errors delete card --router" + err,
     });
   }
 });
