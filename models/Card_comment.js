@@ -1,15 +1,43 @@
 const CommentEntity = require("../entities/card_comments.entity");
+const UserEntity = require("../entities/users.entity");
 
 //   create comment
-const createComment = async (body) => {
+const createComment = async (newComment) => {
   try {
-    const result = await CommentEntity.create(body);
+    const dataUser = await UserEntity.findOne({
+      _id: newComment.user_ID,
+    });
+    const dataComment = {
+      card_ID: newComment.card_ID,
+      user_ID: newComment.user_ID,
+      comment_info: {
+        user_name: dataUser.username,
+        content: newComment.content,
+      },
+    };
+    const result = await CommentEntity.create(dataComment);
     return {
       data: result,
       status: 200,
     };
   } catch (err) {
     console.log("err create comment --models", err);
+    throw err;
+  }
+};
+
+//   get WS by user ID
+const getCommentByCardID = async ({ cardID }) => {
+  try {
+    const result = await CommentEntity.find({
+      card_ID: cardID,
+    });
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err get comment by cardID --models", err);
     throw err;
   }
 };
@@ -21,7 +49,7 @@ const getAllComment = async ({ name }) => {
     const query = {};
     if (name) query.name = regexName;
 
-    const result = await CommentEntity.find(query).limit(20);
+    const result = await CommentEntity.find().limit(20);
     return result;
   } catch (err) {
     console.log("err get all comment --models", err);
@@ -30,12 +58,17 @@ const getAllComment = async ({ name }) => {
 };
 
 //   update comment
-const editComment = async ({ comment_ID, data }) => {
+const editComment = async ({ commentID, data }) => {
   try {
     const result = await CommentEntity.findOneAndUpdate(
-      { _id: comment_ID },
-      { $set: data }
+      { _id: commentID },
+      {
+        $set: {
+          "comment_info.content": data.content,
+        },
+      }
     );
+    console.log("result", result);
     return {
       data: result,
       status: 200,
@@ -47,15 +80,15 @@ const editComment = async ({ comment_ID, data }) => {
 };
 
 //   delete comment
-const deleteComment = async ({ comment_ID }) => {
+const deleteComment = async ({ commentID }) => {
   try {
-    const result = await CommentEntity.deleteOne({ _id: comment_ID });
+    const result = await CommentEntity.deleteOne({ _id: commentID });
     return {
       data: result,
       status: 200,
     };
   } catch (err) {
-    console.log("err delete TaskList --models", err);
+    console.log("err delete comment --models", err);
     throw err;
   }
 };
@@ -63,6 +96,7 @@ const deleteComment = async ({ comment_ID }) => {
 module.exports = {
   createComment,
   getAllComment,
+  getCommentByCardID,
   editComment,
   deleteComment,
 };
