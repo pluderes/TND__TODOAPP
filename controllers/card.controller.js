@@ -1,9 +1,9 @@
 const modelCard = require("../models/Card");
 const errorMessage = require("../config").errorMessage;
 
-const createCard = async (data) => {
+const createCard = async (newCard) => {
   try {
-    let result = await modelCard.createCard(data);
+    let result = await modelCard.createCard(newCard);
     if (!result)
       res.status(402).json(errorMessage(["err create card --controller"]));
     else {

@@ -12,6 +12,12 @@ const columns = new Schema({
     type: String,
     required: true,
   },
+  card_IDs: [
+    {
+      _id: false,
+      card_ID: { type: Schema.Types.ObjectId, ref: "Cards" },
+    },
+  ],
 });
 
 const Columns = mongoose.model("Columns", columns);

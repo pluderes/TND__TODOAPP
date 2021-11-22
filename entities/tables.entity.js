@@ -17,10 +17,17 @@ const tables = new Schema({
     type: Boolean,
     required: true,
   },
+  users_in_table: [
+    {
+      _id: false,
+      user_ID: { type: Schema.Types.ObjectId, ref: "Users" },
+      user_permission: { type: String, required: true },
+    },
+  ],
   column_IDs: [
     {
       _id: false,
-      column_ID: { type: Schema.Types.ObjectId, ref: "Column" },
+      column_ID: { type: Schema.Types.ObjectId, ref: "Columns" },
     },
   ],
 });

@@ -35,7 +35,10 @@ const getAllTable = async ({ table_name }) => {
 
 const getTableByWorkspaceID = async ({ workspaceID, table_name }) => {
   try {
-    let result = await modelTable.getTableByWorkspaceID({ workspaceID, table_name });
+    let result = await modelTable.getTableByWorkspaceID({
+      workspaceID,
+      table_name,
+    });
     if (!result)
       res
         .status(402)
@@ -68,15 +71,51 @@ const editTable = async ({ tableID, data }) => {
   }
 };
 
+const addUserTable = async ({ tableID, data }) => {
+  try {
+    let result = await modelTable.addUserTable({
+      tableID,
+      data,
+    });
+    if (!result)
+      res.status(402).json(errorMessage(["err add user table --controller"]));
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(errorMessage(["err add user table --controller", err]));
+  }
+};
+
+const deleteUserTable = async ({ tableID, data }) => {
+  try {
+    let result = await modelTable.deleteUserTable({
+      tableID,
+      data,
+    });
+    if (!result)
+      res
+        .status(402)
+        .json(errorMessage(["err delete user in table --controller"]));
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(errorMessage(["err delete user in table --controller", err]));
+  }
+};
+
 const deleteTable = async ({ tableID }) => {
   try {
     let result = await modelTable.deleteTable({ tableID });
     if (!result)
       res
         .status(402)
-        .json(
-          errorMessage(["err delete table by ID --controller"])
-        );
+        .json(errorMessage(["err delete table by ID --controller"]));
     else {
       return result;
     }
@@ -92,5 +131,7 @@ module.exports = {
   getAllTable,
   getTableByWorkspaceID,
   editTable,
+  addUserTable,
+  deleteUserTable,
   deleteTable,
 };
