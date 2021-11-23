@@ -26,7 +26,7 @@ const createComment = async (newComment) => {
   }
 };
 
-//   get WS by user ID
+//   get comment by card ID
 const getCommentByCardID = async ({ cardID }) => {
   try {
     const result = await CommentEntity.find({
