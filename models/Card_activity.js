@@ -1,9 +1,21 @@
 const ActivityEntity = require("../entities/card_activities.entity");
+const UserEntity = require("../entities/users.entity");
 
 //   create activity
-const createActivity = async (body) => {
+const createActivity = async (newActivity) => {
   try {
-    const result = await ActivityEntity.create(body);
+    const dataUser = await UserEntity.findOne({
+      _id: newActivity.user_ID,
+    });
+    const dataActivity = {
+      card_ID: newActivity.card_ID,
+      user_ID: newActivity.user_ID,
+      activity_info: {
+        user_name: dataUser.username,
+        content: newActivity.content,
+      },
+    };
+    const result = await ActivityEntity.create(dataActivity);
     return {
       data: result,
       status: 200,
@@ -21,7 +33,7 @@ const getAllActivity = async ({ name }) => {
     const query = {};
     if (name) query.name = regexName;
 
-    const result = await ActivityEntity.find(query).limit(20);
+    const result = await ActivityEntity.find().limit(20);
     return result;
   } catch (err) {
     console.log("err get all Activity --models", err);
@@ -29,33 +41,18 @@ const getAllActivity = async ({ name }) => {
   }
 };
 
-//   update Activity
-const editActivity = async ({ activity_ID, data }) => {
+//   get activity by card ID
+const getActivityByCardID = async ({ cardID }) => {
   try {
-    const result = await ActivityEntity.findOneAndUpdate(
-      { _id: activity_ID },
-      { $set: data }
-    );
+    const result = await ActivityEntity.find({
+      card_ID: cardID,
+    });
     return {
       data: result,
       status: 200,
     };
   } catch (err) {
-    console.log("err update activity --models", err);
-    throw err;
-  }
-};
-
-//   delete Activity
-const deleteActivity = async ({ activity_ID }) => {
-  try {
-    const result = await ActivityEntity.deleteOne({ _id: activity_ID });
-    return {
-      data: result,
-      status: 200,
-    };
-  } catch (err) {
-    console.log("err delete Activity --models", err);
+    console.log("err get activity by cardID --models", err);
     throw err;
   }
 };
@@ -63,6 +60,5 @@ const deleteActivity = async ({ activity_ID }) => {
 module.exports = {
   createActivity,
   getAllActivity,
-  editActivity,
-  deleteActivity,
+  getActivityByCardID,
 };
