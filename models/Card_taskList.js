@@ -1,9 +1,9 @@
 const TaskListEntity = require("../entities/card_taskList.entity");
 
 //   create card_taskList
-const createTaskList = async (body) => {
+const createTaskList = async (newTaskList) => {
   try {
-    const result = await TaskListEntity.create(body);
+    const result = await TaskListEntity.create(newTaskList);
     return {
       data: result,
       status: 200,
@@ -21,7 +21,7 @@ const getAllTaskList = async ({ name }) => {
     const query = {};
     if (name) query.name = regexName;
 
-    const result = await TaskListEntity.find(query).limit(20);
+    const result = await TaskListEntity.find().limit(20);
     return result;
   } catch (err) {
     console.log("err get all TaskList --models", err);
@@ -29,11 +29,26 @@ const getAllTaskList = async ({ name }) => {
   }
 };
 
+const getTaskListByCardID = async ({ cardID }) => {
+  try {
+    const result = await TaskListEntity.find({
+      card_ID: cardID,
+    });
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err get taskList by cardID --models", err);
+    throw err;
+  }
+};
+
 //   update card_taskList
-const editTaskList = async ({ taskList_ID, data }) => {
+const editTaskList = async ({ taskListID, data }) => {
   try {
     const result = await TaskListEntity.findOneAndUpdate(
-      { _id: taskList_ID },
+      { _id: taskListID },
       { $set: data }
     );
     return {
@@ -47,9 +62,9 @@ const editTaskList = async ({ taskList_ID, data }) => {
 };
 
 //   delete card_taskList
-const deleteTaskList = async ({ taskList_ID }) => {
+const deleteTaskList = async ({ taskListID }) => {
   try {
-    const result = await TaskListEntity.deleteOne({ _id: taskList_ID });
+    const result = await TaskListEntity.deleteOne({ _id: taskListID });
     return {
       data: result,
       status: 200,
@@ -63,6 +78,7 @@ const deleteTaskList = async ({ taskList_ID }) => {
 module.exports = {
   createTaskList,
   getAllTaskList,
+  getTaskListByCardID,
   editTaskList,
   deleteTaskList,
 };
