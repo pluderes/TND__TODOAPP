@@ -5,8 +5,8 @@ const Columns = require("./columns.entity");
 const Cards = require("./cards.entity");
 const Card_activities = require("./card_activities.entity");
 const Card_comments = require("./card_comments.entity");
-const Card_taskList = require("./card_taskList.entity");
-const TaskList_subtasks = require("./taskList_subtasks.entity");
+const Card_taskLists = require("./card_taskList.entity");
+const TaskList_subTasks = require("./taskList_subtasks.entity");
 
 module.exports = {
   User,
@@ -16,6 +16,6 @@ module.exports = {
   Cards,
   Card_activities,
   Card_comments,
-  Card_taskList,
-  TaskList_subtasks,
+  Card_taskLists,
+  TaskList_subTasks,
 };
