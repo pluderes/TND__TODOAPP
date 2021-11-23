@@ -1,68 +1,127 @@
-const SubtaskEntity = require("../entities/taskList_subtasks.entity");
+const SubTaskEntity = require("../entities/taskList_subtasks.entity");
+const TaskListEntity = require("../entities/card_taskList.entity");
+const mongoose = require("mongoose");
 
 //   create subtask
-const createSubtask = async (body) => {
+const createSubTask = async (newSubTask) => {
   try {
-    const result = await SubtaskEntity.create(body);
-    return {
-      data: result,
-      status: 200,
+    const dataSubTask = {
+      taskList_ID: newSubTask.taskList_ID,
+      subtask_info: {
+        content: newSubTask.content,
+      },
+      subtask_status: newSubTask.subtask_status,
     };
-  } catch (err) {
-    console.log("err create Subtask --models", err);
-    throw err;
-  }
-};
-
-// get all Subtask
-const getAllSubtask = async ({ name }) => {
-  try {
-    const regexName = new RegExp(`${name}`);
-    const query = {};
-    if (name) query.name = regexName;
-
-    const result = await SubtaskEntity.find(query).limit(20);
-    return result;
-  } catch (err) {
-    console.log("err get all Subtask --models", err);
-    throw err;
-  }
-};
-
-//   update Subtask
-const editSubtask = async ({ subtask_ID, data }) => {
-  try {
-    const result = await SubtaskEntity.findOneAndUpdate(
-      { _id: subtask_ID },
-      { $set: data }
+    const result = await SubTaskEntity.create(dataSubTask);
+    const result2 = await TaskListEntity.findOneAndUpdate(
+      { _id: newSubTask.taskList_ID },
+      {
+        $push: {
+          subTask_IDs: {
+            subTask_ID: mongoose.Types.ObjectId(result._id),
+          },
+        },
+      }
     );
     return {
       data: result,
       status: 200,
     };
   } catch (err) {
-    console.log("err update Subtask --models", err);
+    console.log("err create Subtask --models.", err);
     throw err;
   }
 };
 
-//   delete Subtask
-const deleteSubtask = async ({ subtask_ID }) => {
+// get all Subtask
+const getAllSubTask = async ({ name }) => {
   try {
-    const result = await SubtaskEntity.deleteOne({ _id: subtask_ID });
+    const regexName = new RegExp(`${name}`);
+    const query = {};
+    if (name) query.name = regexName;
+
+    const result = await SubTaskEntity.find().limit(20);
+    return result;
+  } catch (err) {
+    console.log("err get all Subtask --models.", err);
+    throw err;
+  }
+};
+
+//   get SubTask by taskListID
+const getSubTaskByTaskListID = async ({ taskListID }) => {
+  try {
+    console.log("taskListID", taskListID);
+    const result = await SubTaskEntity.find({
+      taskList_ID: taskListID,
+    });
     return {
       data: result,
       status: 200,
     };
   } catch (err) {
-    console.log("err delete Subtask --models", err);
+    console.log("err get subtask by taskListID --models", err);
+    throw err;
+  }
+};
+
+//   update Subtask
+const editSubTask = async ({ subTaskID, data }) => {
+  try {
+    if (!data.users || data.users == "") {
+      const result = await SubTaskEntity.findOneAndUpdate(
+        { _id: subTaskID },
+        {
+          $set: {
+            "subtask_info.content": data.content,
+          },
+        }
+      );
+      return {
+        data: result,
+        status: 200,
+      };
+    } else {
+      const result = await SubTaskEntity.findOneAndUpdate(
+        { _id: subTaskID },
+        {
+          $set: {
+            "subtask_info.content": data.content,
+          },
+          $push: {
+            "subtask_info.users": data.users,
+          },
+        }
+      );
+      return {
+        data: result,
+        status: 200,
+      };
+    }
+  } catch (err) {
+    console.log("err update Subtask --models.", err);
+    throw err;
+  }
+};
+
+//   delete Subtask
+const deleteSubTask = async ({ subTaskID }) => {
+  try {
+    const result = await SubTaskEntity.deleteOne({ _id: subTaskID });
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err delete Subtask --models.", err);
     throw err;
   }
 };
 
 module.exports = {
-  createSubtask,
-  getAllSubtask,
-  editSubtask,
-  deleteSubtask,
+  createSubTask,
+  getAllSubTask,
+  getSubTaskByTaskListID,
+  editSubTask,
+  deleteSubTask,
 };

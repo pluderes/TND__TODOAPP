@@ -6,12 +6,16 @@ const taskList_subtasks = new Schema({
   taskList_ID: {
     _id: false,
     type: Schema.Types.ObjectId,
-    ref: "Card_taskList",
+    ref: "Card_taskLists",
     required: true,
   },
-  subtask_name: {
-    type: String,
-    required: true,
+  subtask_info: {
+    _id: false,
+    users: [{ type: String }],
+    content: {
+      type: String,
+      required: true,
+    },
   },
   subtask_status: {
     type: Boolean,
