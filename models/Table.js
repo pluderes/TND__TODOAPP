@@ -20,7 +20,9 @@ const getAllTable = async ({ table_name }) => {
     const regexName = new RegExp(`${table_name}`);
     const query = {};
     if (table_name) query.table_name = regexName;
-    const result = await TableEntity.find(query).limit(20);
+    const result = await TableEntity.find(query).populate(
+      "column_IDs.column_ID"
+    );
     return result;
   } catch (err) {
     console.log("err get all table --models", err);
@@ -36,7 +38,9 @@ const getTableByWorkspaceID = async ({ workspaceID, table_name }) => {
       let regexName = new RegExp(`${table_name}`);
       query = { ...query, table_name: regexName };
     }
-    const result = await TableEntity.find(query).limit(20);
+    const result = await TableEntity.find(query).populate(
+      "column_IDs.column_ID"
+    );
     return {
       data: result,
       status: 200,

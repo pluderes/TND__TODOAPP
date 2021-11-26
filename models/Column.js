@@ -35,7 +35,7 @@ const getAllColumn = async ({ name }) => {
     const query = {};
     if (name) query.name = regexName;
 
-    const result = await ColumnEntity.find(query).limit(20);
+    const result = await ColumnEntity.find(query).populate("card_IDs.card_ID");
     return result;
   } catch (err) {
     console.log("err get all column --models", err);
@@ -51,7 +51,7 @@ const getColumnByTableID = async ({ tableID, column_name }) => {
       let regexName = new RegExp(`${column_name}`);
       query = { ...query, column_name: regexName };
     }
-    const result = await ColumnEntity.find(query);
+    const result = await ColumnEntity.find(query).populate("card_IDs.card_ID");
     return {
       data: result,
       status: 200,

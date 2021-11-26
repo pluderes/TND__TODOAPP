@@ -21,7 +21,9 @@ const getAllTaskList = async ({ name }) => {
     const query = {};
     if (name) query.name = regexName;
 
-    const result = await TaskListEntity.find().limit(20);
+    const result = await TaskListEntity.find().populate(
+      "subTask_IDs.subTask_ID"
+    );
     return result;
   } catch (err) {
     console.log("err get all TaskList --models", err);
