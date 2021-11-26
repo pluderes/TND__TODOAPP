@@ -96,9 +96,9 @@ const deleteUserCard = async ({ cardID, data }) => {
   }
 };
 
-const deleteCard = async ({ cardID }) => {
+const deleteCard = async ({ cardID, columnID }) => {
   try {
-    let result = await modelCard.deleteCard({ cardID });
+    let result = await modelCard.deleteCard({ cardID, columnID });
     if (!result)
       res
         .status(402)

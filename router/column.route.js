@@ -72,8 +72,10 @@ columnRouter.patch("/editColumn/:columnID", async (req, res) => {
 columnRouter.delete("/deleteColumn/:columnID", async (req, res) => {
   try {
     const { columnID } = req.params;
+    const { tableID } = req.body;
     const result = await Controller.Column.deleteColumn({
       columnID,
+      tableID,
     });
     res.json(result);
   } catch (err) {

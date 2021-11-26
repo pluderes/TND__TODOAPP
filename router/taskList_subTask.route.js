@@ -73,8 +73,10 @@ subTaskRouter.patch("/editSubTask/:subTaskID", async (req, res) => {
 subTaskRouter.delete("/deleteSubTask/:subTaskID", async (req, res) => {
   try {
     const { subTaskID } = req.params;
+    const { taskListID } = req.body;
     const result = await Controller.SubTask.deleteSubTask({
       subTaskID,
+      taskListID,
     });
     res.json(result);
   } catch (err) {

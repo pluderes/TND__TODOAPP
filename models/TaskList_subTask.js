@@ -1,6 +1,7 @@
 const SubTaskEntity = require("../entities/taskList_subtasks.entity");
 const TaskListEntity = require("../entities/card_taskList.entity");
 const mongoose = require("mongoose");
+const { TaskList } = require("../controllers");
 
 //   create subtask
 const createSubTask = async (newSubTask) => {
@@ -105,9 +106,17 @@ const editSubTask = async ({ subTaskID, data }) => {
 };
 
 //   delete Subtask
-const deleteSubTask = async ({ subTaskID }) => {
+const deleteSubTask = async ({ subTaskID, taskListID }) => {
   try {
     const result = await SubTaskEntity.deleteOne({ _id: subTaskID });
+    const redult2 = await TaskListEntity.findOneAndUpdate(
+      { _id: taskListID },
+      {
+        $pull: {
+          subTask_IDs: { subTask_ID: subTaskID },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,

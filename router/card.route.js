@@ -116,8 +116,10 @@ cardRouter.patch("/deleteUserCard/:cardID", async (req, res) => {
 cardRouter.delete("/deleteCard/:cardID", async (req, res) => {
   try {
     const { cardID } = req.params;
+    const { columnID } = req.body;
     const result = await Controller.Card.deleteCard({
       cardID,
+      columnID,
     });
     res.json(result);
   } catch (err) {

@@ -68,9 +68,9 @@ const editColumn = async ({ columnID, data }) => {
   }
 };
 
-const deleteColumn = async ({ columnID }) => {
+const deleteColumn = async ({ columnID, tableID }) => {
   try {
-    let result = await modelColumn.deleteColumn({ columnID });
+    let result = await modelColumn.deleteColumn({ columnID, tableID });
     if (!result)
       res
         .status(402)

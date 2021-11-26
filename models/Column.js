@@ -80,9 +80,19 @@ const editColumn = async ({ columnID, data }) => {
 };
 
 //   delete column
-const deleteColumn = async ({ columnID }) => {
+const deleteColumn = async ({ columnID, tableID }) => {
   try {
     const result = await ColumnEntity.deleteOne({ _id: columnID });
+    const result2 = await TableEntity.findOneAndUpdate(
+      { _id: tableID },
+      {
+        $pull: {
+          column_IDs: {
+            column_ID: columnID,
+          },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,

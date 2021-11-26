@@ -68,9 +68,9 @@ const editSubTask = async ({ subTaskID, data }) => {
 };
 
 // delete subtask by ID
-const deleteSubTask = async ({ subTaskID }) => {
+const deleteSubTask = async ({ subTaskID, taskListID }) => {
   try {
-    let result = await modelSubTask.deleteSubTask({ subTaskID });
+    let result = await modelSubTask.deleteSubTask({ subTaskID, taskListID });
     if (!result)
       res
         .status(402)
