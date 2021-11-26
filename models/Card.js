@@ -49,7 +49,9 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
       let regexName = new RegExp(`${card_name}`);
       query = { ...query, card_name: regexName };
     }
-    const result = await CardEntity.find(query);
+    const result = await CardEntity.find(query).populate(
+      "users_in_card.user_ID"
+    );
     return {
       data: result,
       status: 200,
@@ -132,9 +134,19 @@ const deleteUserCard = async ({ cardID, data }) => {
 };
 
 //   delete card
-const deleteCard = async ({ cardID }) => {
+const deleteCard = async ({ cardID, columnID }) => {
   try {
     const result = await CardEntity.deleteOne({ _id: cardID });
+    const result2 = await ColumnEntity.findOneAndUpdate(
+      { _id: columnID },
+      {
+        $pull: {
+          card_IDs: {
+            card_ID: cardID,
+          },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,

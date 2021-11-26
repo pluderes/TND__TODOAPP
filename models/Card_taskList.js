@@ -35,7 +35,7 @@ const getTaskListByCardID = async ({ cardID }) => {
   try {
     const result = await TaskListEntity.find({
       card_ID: cardID,
-    });
+    }).populate("subTask_IDs.subTask_ID");
     return {
       data: result,
       status: 200,
