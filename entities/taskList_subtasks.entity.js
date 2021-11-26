@@ -23,9 +23,9 @@ const taskList_subtasks = new Schema({
   },
 });
 
-const TaskList_subtasks = mongoose.model(
-  "TaskList_subtasks",
+const TaskList_subTasks = mongoose.model(
+  "TaskList_subTasks",
   taskList_subtasks
 );
 
-module.exports = TaskList_subtasks;
+module.exports = TaskList_subTasks;
