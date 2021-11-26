@@ -21,7 +21,9 @@ const getAllWorkspace = async ({ workspace_name }) => {
     const regexName = new RegExp(`${workspace_name}`);
     const query = {};
     if (workspace_name) query.workspace_name = regexName;
-    const result = await WorkspaceEntity.find(query).limit(20);
+    const result = await WorkspaceEntity.find(query).populate(
+      "users_in_ws.user_ID"
+    );
     return result;
   } catch (err) {
     console.log("err get all workspace --models", err);
@@ -31,7 +33,9 @@ const getAllWorkspace = async ({ workspace_name }) => {
 //   get WS by ID
 const getWorkspaceById = async ({ workspaceID }) => {
   try {
-    const result = await WorkspaceEntity.findOne({ _id: workspaceID });
+    const result = await WorkspaceEntity.findOne({ _id: workspaceID }).populate(
+      "users_in_ws.user_ID"
+    );
     return {
       data: result,
       status: 200,
@@ -48,7 +52,7 @@ const getWorkspaceByUserId = async ({ id }) => {
     // console.log("userID - models", id);
     const result = await WorkspaceEntity.find({
       "users_in_ws.user_ID": id,
-    }).populate("");
+    }).populate("users_in_ws.user_ID");
     return {
       data: result,
       status: 200,
