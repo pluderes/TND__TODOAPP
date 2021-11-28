@@ -68,6 +68,27 @@ const editTable = async ({ tableID, data }) => {
   }
 };
 
+//   update Subtask
+const checkStar = async ({ tableID }) => {
+  try {
+    const result = await TableEntity.findById(tableID, function (err, table) {
+      table.star = !table.star;
+      table.save(function (err) {
+        if (err) {
+          console.error("ERROR!");
+        }
+      });
+    });
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err update star --models.", err);
+    throw err;
+  }
+};
+
 //   add user to table
 const addUserTable = async ({ tableID, data }) => {
   try {
@@ -130,6 +151,7 @@ module.exports = {
   getTableByWorkspaceID,
   editTable,
   addUserTable,
+  checkStar,
   deleteUserTable,
   deleteTable,
 };

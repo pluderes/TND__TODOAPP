@@ -71,6 +71,22 @@ const editTable = async ({ tableID, data }) => {
   }
 };
 
+//   check subtask
+const checkStar = async ({ tableID }) => {
+  try {
+    let result = await modelTable.checkStar({
+      tableID,
+    });
+    if (!result)
+      res.status(402).json(errorMessage(["err check star --controller"]));
+    else {
+      return result;
+    }
+  } catch (err) {
+    res.status(402).json(errorMessage(["err check star --controller.", err]));
+  }
+};
+
 const addUserTable = async ({ tableID, data }) => {
   try {
     let result = await modelTable.addUserTable({
@@ -131,6 +147,7 @@ module.exports = {
   getAllTable,
   getTableByWorkspaceID,
   editTable,
+  checkStar,
   addUserTable,
   deleteUserTable,
   deleteTable,

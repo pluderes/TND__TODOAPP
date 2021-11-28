@@ -2,13 +2,15 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const tableRouter = express.Router();
 
 // create new table
 tableRouter.post("/addTable", async (req, res) => {
   try {
-    const { name, star, workspace_ID, user_ID } = req.body;
+    const { name, star, workspace_ID } = req.body;
+    const userToken = req.headers.authorization.split(" ")[1];
     let userID = await jwt.verify(userToken, process.env.JWT_KEY);
     const newTable = {
       workspace_ID: workspace_ID,
@@ -17,7 +19,6 @@ tableRouter.post("/addTable", async (req, res) => {
       users_in_table: [
         {
           user_ID: mongoose.Types.ObjectId(userID.id),
-          // user_ID: mongoose.Types.ObjectId(user_ID),
           user_permission: "admin",
         },
       ],
@@ -75,6 +76,20 @@ tableRouter.patch("/editTable/:tableID", async (req, res) => {
   } catch (err) {
     res.status(500).json({
       msg: "errors edit table --router" + err,
+    });
+  }
+});
+
+tableRouter.patch("/checkStar/:tableID", async (req, res) => {
+  try {
+    const { tableID } = req.params;
+    const result = await Controller.Table.checkStar({
+      tableID,
+    });
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      msg: "errors check star --router",
     });
   }
 });
