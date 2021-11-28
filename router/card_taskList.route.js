@@ -71,8 +71,10 @@ taskListRouter.patch("/editTaskList/:taskListID", async (req, res) => {
 taskListRouter.delete("/deleteTaskList/:taskListID", async (req, res) => {
   try {
     const { taskListID } = req.params;
+    const { cardID } = req.body;
     const result = await Controller.TaskList.deleteTaskList({
       taskListID,
+      cardID,
     });
     res.json(result);
   } catch (err) {

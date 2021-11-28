@@ -1,9 +1,17 @@
 const TaskListEntity = require("../entities/card_taskList.entity");
-
+const CardEntity = require("../entities/cards.entity");
 //   create card_taskList
 const createTaskList = async (newTaskList) => {
   try {
     const result = await TaskListEntity.create(newTaskList);
+    const result2 = await CardEntity.findOneAndUpdate(
+      { _id: newTaskList.card_ID },
+      {
+        $push: {
+          card_taskLists: { taskList_ID: result._id },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,
@@ -50,7 +58,7 @@ const getTaskListByCardID = async ({ cardID }) => {
 const editTaskList = async ({ taskListID, data }) => {
   try {
     const result = await TaskListEntity.findOneAndUpdate(
-      { _id: taskListID },
+      { _id: newTaskList.card_ID },
       { $set: data }
     );
     return {
@@ -64,9 +72,17 @@ const editTaskList = async ({ taskListID, data }) => {
 };
 
 //   delete card_taskList
-const deleteTaskList = async ({ taskListID }) => {
+const deleteTaskList = async ({ taskListID, cardID }) => {
   try {
     const result = await TaskListEntity.deleteOne({ _id: taskListID });
+    const result2 = await CardEntity.findOneAndUpdate(
+      { _id: cardID },
+      {
+        $pull: {
+          card_taskLists: { taskList_ID: taskListID },
+        },
+      }
+    );
     return {
       data: result,
       status: 200,

@@ -66,9 +66,9 @@ const editTaskList = async ({ taskListID, data }) => {
 };
 
 // delete tasklist by ID
-const deleteTaskList = async ({ taskListID }) => {
+const deleteTaskList = async ({ taskListID, cardID }) => {
   try {
-    let result = await modelTaskList.deleteTaskList({ taskListID });
+    let result = await modelTaskList.deleteTaskList({ taskListID, cardID });
     if (!result)
       res
         .status(402)
