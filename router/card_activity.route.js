@@ -2,6 +2,7 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const activityRouter = express.Router();
 
@@ -9,10 +10,11 @@ const activityRouter = express.Router();
 activityRouter.post("/addActivity", async (req, res) => {
   try {
     const { card_ID, content, user_ID } = req.body;
-    // let userID = await jwt.verify(userToken, process.env.JWT_KEY);
+    const userToken = req.headers.authorization.split(" ")[1];
+    let userID = await jwt.verify(userToken, process.env.JWT_KEY);
     const newActivity = {
       card_ID: card_ID,
-      user_ID: user_ID,
+      user_ID: mongoose.Types.ObjectId(userID.id),
       content: content,
     };
     newActivity.activity_ID = uuidv4();

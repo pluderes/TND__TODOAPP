@@ -15,12 +15,9 @@ const card_activities = new Schema({
     ref: "Users",
     required: true,
   },
-  activity_info: {
-    user_name: { type: String, required: true },
-    content: {
-      type: String,
-      required: true,
-    },
+  content: {
+    type: String,
+    required: true,
   },
   createAt: {
     type: Date,
