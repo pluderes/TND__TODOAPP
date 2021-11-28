@@ -66,9 +66,9 @@ const editComment = async ({ commentID, data }) => {
 };
 
 // delete comment by ID
-const deleteComment = async ({ commentID }) => {
+const deleteComment = async ({ commentID, cardID }) => {
   try {
-    let result = await modelComment.deleteComment({ commentID });
+    let result = await modelComment.deleteComment({ commentID, cardID });
     if (!result)
       res
         .status(402)

@@ -2,17 +2,20 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const commentRouter = express.Router();
 
 // create new comment
 commentRouter.post("/addComment", async (req, res) => {
   try {
-    const { card_ID, content, user_ID } = req.body;
-    // let userID = await jwt.verify(userToken, process.env.JWT_KEY);
+    const { card_ID, content } = req.body;
+    const userToken = req.headers.authorization.split(" ")[1];
+    let userID = await jwt.verify(userToken, process.env.JWT_KEY);
+
     const newComment = {
       card_ID: card_ID,
-      user_ID: user_ID,
+      user_ID: mongoose.Types.ObjectId(userID.id),
       content: content,
     };
     newComment.comment_ID = uuidv4();
@@ -73,8 +76,10 @@ commentRouter.patch("/editComment/:commentID", async (req, res) => {
 commentRouter.delete("/deleteComment/:commentID", async (req, res) => {
   try {
     const { commentID } = req.params;
+    const { cardID } = req.body;
     const result = await Controller.Comment.deleteComment({
       commentID,
+      cardID,
     });
     res.json(result);
   } catch (err) {

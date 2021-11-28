@@ -15,12 +15,9 @@ const card_comments = new Schema({
     ref: "Users",
     requied: true,
   },
-  comment_info: {
-    user_name: { type: String, required: true },
-    content: {
-      type: String,
-      required: true,
-    },
+  content: {
+    type: String,
+    required: true,
   },
   createAt: {
     type: Date,
