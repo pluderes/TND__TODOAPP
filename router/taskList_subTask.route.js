@@ -8,11 +8,10 @@ const subTaskRouter = express.Router();
 // create new comment
 subTaskRouter.post("/addSubTask", async (req, res) => {
   try {
-    const { taskList_ID, content, subtask_status } = req.body;
+    const { taskList_ID, content, subtask_checked } = req.body;
     const newSubTask = {
       taskList_ID: taskList_ID,
       content: content,
-      subtask_status: subtask_status,
     };
     newSubTask.subTask_ID = uuidv4();
     const result = await Controller.SubTask.createSubTask(newSubTask);
@@ -63,6 +62,20 @@ subTaskRouter.patch("/editSubTask/:subTaskID", async (req, res) => {
     });
     res.json(result);
   } catch (err) {
+    res.status(500).json({
+      msg: "errors edit subtask --router",
+    });
+  }
+});
+
+subTaskRouter.patch("/checkSubTask/:subTaskID", async (req, res) => {
+  try {
+    const { subTaskID } = req.params;
+    const result = await Controller.SubTask.checkSubTask({
+      subTaskID,
+    });
+    res.json(result);
+  } catch (error) {
     res.status(500).json({
       msg: "errors edit subtask --router",
     });

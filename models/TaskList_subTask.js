@@ -1,7 +1,6 @@
 const SubTaskEntity = require("../entities/taskList_subtasks.entity");
 const TaskListEntity = require("../entities/card_taskList.entity");
 const mongoose = require("mongoose");
-const { TaskList } = require("../controllers");
 
 //   create subtask
 const createSubTask = async (newSubTask) => {
@@ -11,7 +10,7 @@ const createSubTask = async (newSubTask) => {
       subtask_info: {
         content: newSubTask.content,
       },
-      subtask_status: newSubTask.subtask_status,
+      subtask_checked: false,
     };
     const result = await SubTaskEntity.create(dataSubTask);
     const result2 = await TaskListEntity.findOneAndUpdate(
@@ -52,7 +51,6 @@ const getAllSubTask = async ({ name }) => {
 //   get SubTask by taskListID
 const getSubTaskByTaskListID = async ({ taskListID }) => {
   try {
-    console.log("taskListID", taskListID);
     const result = await SubTaskEntity.find({
       taskList_ID: taskListID,
     });
@@ -73,9 +71,7 @@ const editSubTask = async ({ subTaskID, data }) => {
       const result = await SubTaskEntity.findOneAndUpdate(
         { _id: subTaskID },
         {
-          $set: {
-            "subtask_info.content": data.content,
-          },
+          $set: data.content,
         }
       );
       return {
@@ -86,9 +82,7 @@ const editSubTask = async ({ subTaskID, data }) => {
       const result = await SubTaskEntity.findOneAndUpdate(
         { _id: subTaskID },
         {
-          $set: {
-            "subtask_info.content": data.content,
-          },
+          $set: data.content,
           $push: {
             "subtask_info.users": data.users,
           },
@@ -99,6 +93,30 @@ const editSubTask = async ({ subTaskID, data }) => {
         status: 200,
       };
     }
+  } catch (err) {
+    console.log("err update Subtask --models.", err);
+    throw err;
+  }
+};
+
+//   update Subtask
+const checkSubTask = async ({ subTaskID }) => {
+  try {
+    const result = await SubTaskEntity.findById(
+      subTaskID,
+      function (err, subTask) {
+        subTask.subtask_checked = !subTask.subtask_checked;
+        subTask.save(function (err) {
+          if (err) {
+            console.error("ERROR!");
+          }
+        });
+      }
+    );
+    return {
+      data: result,
+      status: 200,
+    };
   } catch (err) {
     console.log("err update Subtask --models.", err);
     throw err;
@@ -132,5 +150,6 @@ module.exports = {
   getAllSubTask,
   getSubTaskByTaskListID,
   editSubTask,
+  checkSubTask,
   deleteSubTask,
 };

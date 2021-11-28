@@ -10,14 +10,13 @@ const taskList_subtasks = new Schema({
     required: true,
   },
   subtask_info: {
-    _id: false,
-    users: [{ type: String }],
+    users: [{ _id: false, type: Schema.Types.ObjectId, ref: "Users" }],
     content: {
       type: String,
       required: true,
     },
   },
-  subtask_status: {
+  subtask_checked: {
     type: Boolean,
     required: true,
   },

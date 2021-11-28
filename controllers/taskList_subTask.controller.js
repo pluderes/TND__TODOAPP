@@ -67,6 +67,24 @@ const editSubTask = async ({ subTaskID, data }) => {
   }
 };
 
+//   check subtask
+const checkSubTask = async ({ subTaskID }) => {
+  try {
+    let result = await modelSubTask.checkSubTask({
+      subTaskID,
+    });
+    if (!result)
+      res.status(402).json(errorMessage(["err check subtask --controller"]));
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(errorMessage(["err check subtask --controller.", err]));
+  }
+};
+
 // delete subtask by ID
 const deleteSubTask = async ({ subTaskID, taskListID }) => {
   try {
@@ -92,5 +110,6 @@ module.exports = {
   getAllSubTask,
   getSubTaskByTaskListID,
   editSubTask,
+  checkSubTask,
   deleteSubTask,
 };
