@@ -49,9 +49,11 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
       let regexName = new RegExp(`${card_name}`);
       query = { ...query, card_name: regexName };
     }
-    const result = await CardEntity.find(query).populate(
-      "users_in_card.user_ID"
-    );
+    const result = await CardEntity.find(query)
+      .populate("users_in_card.user_ID")
+      .populate("card_taskLists.taskList_ID")
+      .populate("card_commnets.comment_ID")
+      .populate("card_activities.activity_ID");
     return {
       data: result,
       status: 200,
@@ -65,8 +67,7 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
 //   update card
 const editCard = async ({ cardID, data }) => {
   try {
-    if (data.card_deadline.deadline) {
-      data.card_deadline.deadline = new Date(data.card_deadline.deadline);
+    if (!data.card_deadline) {
       const result = await CardEntity.findOneAndUpdate(
         { _id: cardID },
         { $set: data }
@@ -76,12 +77,13 @@ const editCard = async ({ cardID, data }) => {
         status: 200,
       };
     } else {
+      data.card_deadline.deadline = new Date(data.card_deadline.deadline);
       const result = await CardEntity.findOneAndUpdate(
         { _id: cardID },
         { $set: data }
       );
       return {
-        data: result + "2",
+        data: result,
         status: 200,
       };
     }

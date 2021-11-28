@@ -2,13 +2,15 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const Controller = require("../controllers");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const cardRouter = express.Router();
 
 // create new card
 cardRouter.post("/addCard", async (req, res) => {
   try {
-    const { name, desc, column_ID, userToken } = req.body;
+    const { name, desc, column_ID } = req.body;
+    const userToken = req.headers.authorization.split(" ")[1];
     let userID = await jwt.verify(userToken, process.env.JWT_KEY);
     const newCard = {
       column_ID: column_ID,
@@ -17,7 +19,6 @@ cardRouter.post("/addCard", async (req, res) => {
       users_in_card: [
         {
           user_ID: mongoose.Types.ObjectId(userID.id),
-          // user_ID: mongoose.Types.ObjectId(user_ID),
           user_permission: "admin",
         },
       ],

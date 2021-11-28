@@ -27,6 +27,24 @@ const cards = new Schema({
     deadline: { type: Date },
     done: { type: Boolean },
   },
+  card_comments: [
+    {
+      _id: false,
+      comment_ID: { type: Schema.Types.ObjectId, ref: "Card_comments" },
+    },
+  ],
+  card_activities: [
+    {
+      _id: false,
+      activity_ID: { type: Schema.Types.ObjectId, ref: "Card_activities" },
+    },
+  ],
+  card_taskLists: [
+    {
+      _id: false,
+      taskList_ID: { type: Schema.Types.ObjectId, ref: "Card_taskList" },
+    },
+  ],
 });
 
 const Cards = mongoose.model("Cards", cards);
