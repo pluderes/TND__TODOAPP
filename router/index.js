@@ -15,16 +15,16 @@ const MDW = require("../middlewares/authToken");
 const app = express();
 
 app.use("/user", userRoute);
-app.use("/loginToken", MDW.required, loginRoute);
 app.use("/login", loginRoute);
-app.use("/workspace", workspaceRoute);
-app.use("/table", tableRoute);
-app.use("/column", columnRoute);
-app.use("/card", cardRoute);
+app.use("/loginToken", MDW.required, loginRoute);
+app.use("/workspace", MDW.required, workspaceRoute);
+app.use("/table", MDW.required, tableRoute);
+app.use("/column", MDW.required, columnRoute);
+app.use("/card", MDW.required, cardRoute);
 
-app.use("/taskList", taskListRoute);
-app.use("/comment", commentRoute);
-app.use("/activity", activityRoute);
-app.use("/subTask", subTaskRoute);
+app.use("/taskList", MDW.required, taskListRoute);
+app.use("/comment", MDW.required, commentRoute);
+app.use("/activity", MDW.required, activityRoute);
+app.use("/subTask", MDW.required, subTaskRoute);
 
 module.exports = app;
