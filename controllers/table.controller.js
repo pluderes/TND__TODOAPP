@@ -54,6 +54,26 @@ const getTableByWorkspaceID = async ({ workspaceID, table_name }) => {
       .json(errorMessage(["err in get table by WS_ID --controller", err]));
   }
 };
+const getTableByTableID = async ({ tableID }) => {
+  try {
+    let result = await modelTable.getTableByTableID({
+      tableID,
+    });
+    if (!result)
+      res
+        .status(402)
+        .json(
+          errorMessage(["something wrong get table by table_ID  --controller"])
+        );
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(errorMessage(["err in get table by WS_ID --controller", err]));
+  }
+};
 
 const editTable = async ({ tableID, data }) => {
   try {
@@ -146,6 +166,7 @@ module.exports = {
   createTable,
   getAllTable,
   getTableByWorkspaceID,
+  getTableByTableID,
   editTable,
   checkStar,
   addUserTable,

@@ -47,7 +47,7 @@ tableRouter.get("/", async (req, res) => {
 });
 
 // get table by WS_ID
-tableRouter.get("/:workspaceID", async (req, res) => {
+tableRouter.get("/ws/:workspaceID", async (req, res) => {
   try {
     const { workspaceID } = req.params;
     const { table_name } = req.body;
@@ -59,6 +59,21 @@ tableRouter.get("/:workspaceID", async (req, res) => {
   } catch (err) {
     res.status(500).json({
       msg: "errors get all table --route" + err,
+    });
+  }
+});
+
+// get table by table_ID
+tableRouter.get("/:tableID", async (req, res) => {
+  try {
+    const { tableID } = req.params;
+    const data = await Controller.Table.getTableByTableID({
+      tableID,
+    });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({
+      msg: "errors get table by ID --route" + err,
     });
   }
 });

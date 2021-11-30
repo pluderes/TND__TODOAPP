@@ -50,6 +50,22 @@ const getTableByWorkspaceID = async ({ workspaceID, table_name }) => {
     throw err;
   }
 };
+// get all table
+const getTableByTableID = async ({ tableID }) => {
+  try {
+    let query = { _id: tableID };
+    const result = await TableEntity.find(query)
+      .populate("column_IDs.column_ID")
+      .populate("users_in_table.user_ID");
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err get table by table_ID --models", err);
+    throw err;
+  }
+};
 
 //   update table
 const editTable = async ({ tableID, data }) => {
@@ -149,6 +165,7 @@ module.exports = {
   createTable,
   getAllTable,
   getTableByWorkspaceID,
+  getTableByTableID,
   editTable,
   addUserTable,
   checkStar,
