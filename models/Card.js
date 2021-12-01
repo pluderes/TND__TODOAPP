@@ -52,7 +52,7 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
     const result = await CardEntity.find(query)
       .populate("users_in_card.user_ID")
       .populate("card_taskLists.taskList_ID")
-      .populate("card_commnets.comment_ID")
+      .populate("card_comments.comment_ID")
       .populate("card_activities.activity_ID");
     return {
       data: result,
