@@ -44,6 +44,23 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
   }
 };
 
+const getCardByCardID = async ({ cardID }) => {
+  try {
+    let result = await modelCard.getCardByCardID({ cardID });
+    if (!result)
+      res
+        .status(402)
+        .json(errorMessage(["err get card by cardID  --controller"]));
+    else {
+      return result;
+    }
+  } catch (err) {
+    res
+      .status(402)
+      .json(errorMessage(["err get card by cardID --controller", err]));
+  }
+};
+
 const editCard = async ({ cardID, data }) => {
   try {
     let result = await modelCard.editCard({
@@ -117,6 +134,7 @@ module.exports = {
   createCard,
   getAllCard,
   getCardByColumnID,
+  getCardByCardID,
   editCard,
   addUserCard,
   deleteUserCard,

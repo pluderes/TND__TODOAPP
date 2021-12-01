@@ -64,6 +64,30 @@ const getCardByColumnID = async ({ columnID, card_name }) => {
   }
 };
 
+// get carn by cardID
+const getCardByCardID = async ({ cardID }) => {
+  try {
+    let query = { _id: cardID };
+    const result = await CardEntity.find(query)
+      .populate("users_in_card.user_ID")
+      .populate("card_commnets.comment_ID")
+      .populate("card_activities.activity_ID")
+      .populate({
+        path: "card_taskLists.taskList_ID",
+        populate: {
+          path: "subTask_IDs.subTask_ID",
+        },
+      });
+    return {
+      data: result,
+      status: 200,
+    };
+  } catch (err) {
+    console.log("err get card by cardID --models", err);
+    throw err;
+  }
+};
+
 //   update card
 const editCard = async ({ cardID, data }) => {
   try {
@@ -163,6 +187,7 @@ module.exports = {
   createCard,
   getAllCard,
   getCardByColumnID,
+  getCardByCardID,
   editCard,
   addUserCard,
   deleteUserCard,

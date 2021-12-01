@@ -46,7 +46,7 @@ cardRouter.get("/", async (req, res, { card_name }) => {
 });
 
 // get card by column_ID
-cardRouter.get("/:columnID", async (req, res) => {
+cardRouter.get("/col/:columnID", async (req, res) => {
   try {
     const { columnID } = req.params;
     const { card_name } = req.body;
@@ -58,6 +58,21 @@ cardRouter.get("/:columnID", async (req, res) => {
   } catch (err) {
     res.status(500).json({
       msg: "errors get all card by column ID --route" + err,
+    });
+  }
+});
+
+// get card by cardID
+cardRouter.get("/:cardID", async (req, res) => {
+  try {
+    const { cardID } = req.params;
+    const data = await Controller.Card.getCardByCardID({
+      cardID,
+    });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({
+      msg: "errors get all card by cardID --route" + err,
     });
   }
 });
