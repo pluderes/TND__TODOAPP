@@ -51,7 +51,12 @@ const getColumnByTableID = async ({ tableID, column_name }) => {
       let regexName = new RegExp(`${column_name}`);
       query = { ...query, column_name: regexName };
     }
-    const result = await ColumnEntity.find(query).populate("card_IDs.card_ID");
+    const result = await ColumnEntity.find(query).populate({
+      path: "card_IDs.card_ID",
+      populate: {
+        path: "users_in_card.user_ID",
+      },
+    });
     return {
       data: result,
       status: 200,
