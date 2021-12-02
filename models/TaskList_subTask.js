@@ -71,7 +71,7 @@ const editSubTask = async ({ subTaskID, data }) => {
       const result = await SubTaskEntity.findOneAndUpdate(
         { _id: subTaskID },
         {
-          $set: data.content,
+          $set: data,
         }
       );
       return {
@@ -82,7 +82,7 @@ const editSubTask = async ({ subTaskID, data }) => {
       const result = await SubTaskEntity.findOneAndUpdate(
         { _id: subTaskID },
         {
-          $set: data.content,
+          $set: data,
           $push: {
             "subtask_info.users": data.users,
           },

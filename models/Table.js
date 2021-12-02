@@ -39,6 +39,7 @@ const getTableByWorkspaceID = async ({ workspaceID, table_name }) => {
       query = { ...query, table_name: regexName };
     }
     const result = await TableEntity.find(query)
+      .populate("workspace_ID")
       .populate("column_IDs.column_ID")
       .populate("users_in_table.user_ID");
     return {
