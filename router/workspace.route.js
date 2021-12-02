@@ -9,8 +9,10 @@ const workspaceRouter = express.Router();
 // create new user
 workspaceRouter.post("/addWorkspace", async (req, res) => {
   try {
-    const { name, desc, userToken } = req.body;
+    const { name, desc } = req.body;
+    const userToken = req.headers.authorization.split(" ")[1];
     let userID = await jwt.verify(userToken, process.env.JWT_KEY);
+
     const newWorkspace = {
       workspace_name: name,
       description: desc,

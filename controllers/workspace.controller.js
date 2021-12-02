@@ -1,9 +1,9 @@
 const modelWorkspace = require("../models/Workspace");
 const errorMessage = require("../config").errorMessage;
 
-const createWorkspace = async (data) => {
+const createWorkspace = async (newWorkspace) => {
   try {
-    let result = await modelWorkspace.createWorkspace(data);
+    let result = await modelWorkspace.createWorkspace(newWorkspace);
     if (!result)
       res
         .status(402)

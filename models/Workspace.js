@@ -3,9 +3,9 @@ const Base = require("./base");
 const WorkspaceEntity = require("../entities/workspace.entity");
 
 //   create WS
-const createWorkspace = async (body) => {
+const createWorkspace = async (newWorkspace) => {
   try {
-    const result = await WorkspaceEntity.create(body);
+    const result = await WorkspaceEntity.create(newWorkspace);
     return {
       data: result,
       status: 200,
